@@ -388,6 +388,70 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
+    }
+    
+    /* 蓝色星球和星星上升效果 */
+    .earth-container {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .earth-globe {
+      font-size: 80px;
+      animation: planetGlow 3s ease-in-out infinite alternate;
+      filter: drop-shadow(0 0 20px rgba(74, 144, 226, 0.6)) drop-shadow(0 0 40px rgba(74, 144, 226, 0.3));
+      cursor: default;
+    }
+    
+    @keyframes planetGlow {
+      0% {
+        filter: drop-shadow(0 0 20px rgba(74, 144, 226, 0.6)) drop-shadow(0 0 40px rgba(74, 144, 226, 0.3));
+      }
+      100% {
+        filter: drop-shadow(0 0 30px rgba(74, 144, 226, 0.8)) drop-shadow(0 0 60px rgba(74, 144, 226, 0.5));
+      }
+    }
+    
+    .rising-star {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: radial-gradient(circle, #fff 0%, #4a90e2 50%, transparent 100%);
+      border-radius: 50%;
+      animation: riseUp 4s ease-out forwards;
+      pointer-events: none;
+      box-shadow: 
+        0 0 6px #fff,
+        0 0 12px #4a90e2,
+        0 0 18px #4a90e2;
+    }
+    
+    /* 增强上升动画 */
+    @keyframes riseUp {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(0.5);
+      }
+      20% {
+        opacity: 1;
+        transform: translateY(-50px) scale(1);
+      }
+      80% {
+        opacity: 0.8;
+        transform: translateY(-200px) scale(1.2);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-300px) scale(0.3);
+      }
     }
     
     .export-content {
@@ -453,47 +517,24 @@
       }
     }
     
-    /* 成功页面样式 */
-    .success-page {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: linear-gradient(180deg, #0a0a13 60%, #181824 100%);
-      z-index: 1000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .success-content {
-      text-align: center;
+    /* 完成消息样式 */
+    .completion-message {
+      font-size: 1.3rem;
       color: #ffe9b0;
-    }
-    
-    .success-content h2 {
-      font-size: 1.8rem;
-      margin-bottom: 30px;
+      margin: 24px 0;
+      text-align: center;
       font-weight: 300;
       letter-spacing: 1px;
+      text-shadow: 0 0 20px rgba(255, 233, 176, 0.3);
     }
     
-    .restart-btn {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    /* 在步骤4时隐藏全局标题 */
+    .global-header {
+      display: block;
     }
     
-    .restart-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    .step4-active .global-header {
+      display: none;
     }
     
     /* 响应式设计 */
@@ -521,12 +562,14 @@
       </div>
     </div>
     
-    <div class="title" id="title">星空下的思念</div>
-    <div class="subtitle" id="subtitle">让你的声音陪伴TA，跨越星河</div>
-    <div class="call-text">呼唤你的宝贝，像往常一样</div>
+    <div class="global-header">
+      <div class="title" id="title">星空下的思念</div>
+      <div class="subtitle" id="subtitle">让你的声音陪伴TA，跨越星河</div>
+    </div>
     
     <!-- 步骤1：第一次录音 -->
     <div class="step active" id="step1">
+      <div class="call-text">呼唤你的宝贝,像以往一样</div>
       <div class="status-msg" id="statusMsg1"></div>
       <div class="btn-container">
         <button class="mic-btn" id="recordBtn1">
@@ -551,6 +594,7 @@
 
     <!-- 步骤2：第二次录音 -->
     <div class="step" id="step2">
+      <div class="call-text">再次呼唤,他/她能更清晰地听见</div>
       <div class="status-msg" id="statusMsg2"></div>
       <div class="btn-container">
         <button class="mic-btn" id="recordBtn2">
@@ -570,7 +614,7 @@
           </div>
         </button>
       </div>
-      <div class="hint-text" id="hintText2">再次呼唤，跨越星河</div>
+      <div class="hint-text" id="hintText2">点击开始录音</div>
     </div>
 
     <!-- 步骤3：试听和选择 -->
@@ -589,6 +633,16 @@
         <button class="action-btn" id="nextStepBtn">下一步</button>
       </div>
     </div>
+
+    <!-- 步骤4：完成 -->
+    <div class="step" id="step4">
+      <div class="title" id="completionTitle">星空下的思念</div>
+      <div class="subtitle" id="completionSubtitle">让你的声音陪伴TA，跨越星河</div>
+      <div class="completion-message">试试呼唤，他／她会回应你，就像以往一样</div>
+      <div class="btn-container">
+        <button class="action-btn" id="restartBtn">重新开始</button>
+      </div>
+    </div>
   </div>
   
   <!-- 设备选择页面 -->
@@ -603,21 +657,31 @@
   <div class="export-page" id="exportPage" style="display:none;">
     <canvas class="star-bg" id="exportStarBg"></canvas>
     <div class="export-content">
-      <div class="searching-text" id="searchingText">微光例子正在寻找她/他...</div>
+      <div class="searching-text" id="searchingText">微光粒⼦正在寻找她/他...</div>
+    </div>
+    <!-- 使用语言选择器的地球图标作为星球 -->
+    <div class="earth-container" id="bluePlanet">
+      <div class="globe-icon earth-globe">🌍</div>
     </div>
   </div>
+  
+
   
   <div class="footer" id="footer">© 星空思念手链 | 你的思念，跨越星河</div>
   
   <script>
+    // 调试模式变量
+    let DEBUG_MODE = true; // 设置为true启用调试模式，false为正常模式
+    
     // 多语言配置
     const translations = {
       zh: {
         title: '星空下的思念',
         subtitle: '让你的声音陪伴TA，跨越星河',
-        callText: '呼唤你的宝贝，像往常一样',
+        callText: '呼唤你的宝贝,像以往一样',
+        callText2: '再次呼唤,他/她能更清晰地听见',
         hintText1: '点击开始录音',
-        hintText2: '再次呼唤，跨越星河',
+        hintText2: '点击开始录音',
         recordComplete: '录音完成',
         recording: '录音中...',
         requesting: '正在请求麦克风权限...',
@@ -625,15 +689,19 @@
         nextStep: '下一步',
         footer: '© 星空思念手链 | 你的思念，跨越星河',
         statusMsg3: '试听你的呼唤是否足够清晰',
-        deviceSelection: '选择要连接的设备',
-        searchingText: '微光例子正在寻找她/他...'
+        searchingText: '微光粒⼦正在寻找她/他...',
+        completionTitle: '试试呼唤，他／她会回应你，就像以往一样',
+        completionSubtitle: '你的声音已经跨越星河，传递给TA',
+        completionMessage: '试试呼唤，他／她会回应你，就像以往一样',
+        restartBtn: '重新开始'
       },
       tw: {
         title: '星空下的思念',
         subtitle: '讓你的聲音陪伴TA，跨越星河',
-        callText: '呼喚你的寶貝，像往常一樣',
+        callText: '呼喚你的寶貝,像以往一樣',
+        callText2: '再次呼喚,他/她能更清晰地聽見',
         hintText1: '點擊開始錄音',
-        hintText2: '再次呼喚，跨越星河',
+        hintText2: '點擊開始錄音',
         recordComplete: '錄音完成',
         recording: '錄音中...',
         requesting: '正在請求麥克風權限...',
@@ -641,15 +709,19 @@
         nextStep: '下一步',
         footer: '© 星空思念手鏈 | 你的思念，跨越星河',
         statusMsg3: '試聽你的呼喚是否足夠清晰',
-        deviceSelection: '選擇要連接的設備',
-        searchingText: '微光例子正在尋找她/他...'
+        searchingText: '微光粒⼦正在尋找她/他...',
+        completionTitle: '試試呼喚，他／她會回應你，就像以往一樣',
+        completionSubtitle: '你的聲音已經跨越星河，傳遞給TA',
+        completionMessage: '試試呼喚，他／她會回應你，就像以往一樣',
+        restartBtn: '重新開始'
       },
       en: {
         title: 'Thoughts Under the Stars',
         subtitle: 'Let your voice accompany them across the galaxy',
         callText: 'Call your beloved, just like before',
+        callText2: 'Call again, they can hear you more clearly',
         hintText1: 'Click to start recording',
-        hintText2: 'Call again, across the stars',
+        hintText2: 'Click to start recording',
         recordComplete: 'Recording Complete',
         recording: 'Recording...',
         requesting: 'Requesting microphone permission...',
@@ -657,8 +729,11 @@
         nextStep: 'Next Step',
         footer: '© Starry Memorial Bracelet | Your thoughts, across the galaxy',
         statusMsg3: 'Listen to check if your call is clear enough',
-        deviceSelection: 'Select Device to Connect',
-        searchingText: 'Glimmer is searching for her/him...'
+        searchingText: 'Glimmer is searching for her/him...',
+        completionTitle: 'Try calling, he/she will respond to you, just like before',
+        completionSubtitle: 'Your voice has crossed the galaxy and reached TA',
+        completionMessage: 'Try calling, he/she will respond to you, just like before',
+        restartBtn: 'Start Again'
       }
     };
     
@@ -686,13 +761,23 @@
     const deviceList = document.getElementById('deviceList');
     const exportPage = document.getElementById('exportPage');
     const searchingText = document.getElementById('searchingText');
+    const completionPage = document.getElementById('completionPage');
+    const restartBtn = document.getElementById('restartBtn');
     
     // 初始化
     document.addEventListener('DOMContentLoaded', function() {
       createStars();
       createExportStars();
+      createCompletionStars();
       updateLanguage();
       setupEventListeners();
+    });
+    
+    // 在页面初始化部分添加
+    window.addEventListener('beforeunload', () => {
+      if (window.currentStream) {
+        window.currentStream.getTracks().forEach(track => track.stop());
+      }
     });
     
     // 创建星空效果
@@ -769,20 +854,173 @@
       animate();
     }
     
+    // 创建星星上升效果
+    function createRisingStars() {
+      const exportPage = document.getElementById('exportPage');
+      const bluePlanet = document.getElementById('bluePlanet');
+      
+      if (!bluePlanet) return;
+      
+      const planetRect = bluePlanet.getBoundingClientRect();
+      const exportRect = exportPage.getBoundingClientRect();
+      
+      // 减少粒子生成频率
+      const starInterval = setInterval(() => {
+        // 每次只生成1-2个粒子（原来是3-6个）
+        const particleCount = Math.floor(Math.random() * 2) + 1;
+        
+        for (let i = 0; i < particleCount; i++) {
+          const star = document.createElement('div');
+          star.className = 'rising-star';
+          
+          // 从地球底部周围的更大范围发射粒子
+          const angle = Math.random() * Math.PI; // 只从上半圆发射（0到π）
+          const radius = 30 + Math.random() * 40; // 更大的发射范围
+          
+          // 计算发射起点（地球底部周围）
+          const centerX = planetRect.left - exportRect.left + 50; // 调整中心点适应更大的地球
+          const centerY = planetRect.top - exportRect.top + 70; // 从地球底部开始
+          
+          const startX = centerX + Math.cos(angle + Math.PI) * radius; // 加π让粒子从底部发射
+          const startY = centerY + Math.sin(angle + Math.PI) * radius;
+          
+          star.style.left = startX + 'px';
+          star.style.bottom = (exportRect.height - startY) + 'px';
+          star.style.animationDelay = (Math.random() * 0.5) + 's';
+          
+          // 随机大小和颜色变化
+          const size = 3 + Math.random() * 4;
+          star.style.width = size + 'px';
+          star.style.height = size + 'px';
+          
+          // 随机发射方向（向上的不同角度）
+          const direction = -60 + Math.random() * 120; // -60度到60度的范围
+          star.style.setProperty('--direction', direction + 'deg');
+          
+          exportPage.appendChild(star);
+          
+          // 4-7秒后移除粒子
+          setTimeout(() => {
+            if (star.parentNode) {
+              star.parentNode.removeChild(star);
+            }
+          }, 4000 + Math.random() * 3000);
+        }
+      }, 500); // 降低粒子生成频率（从200ms改为500ms）
+      
+      // 返回清理函数
+      return () => {
+        clearInterval(starInterval);
+        const stars = exportPage.querySelectorAll('.rising-star');
+        stars.forEach(star => {
+          if (star.parentNode) {
+            star.parentNode.removeChild(star);
+          }
+        });
+      };
+    }
+    
+    // 创建完成页面星空效果
+    function createCompletionStars() {
+      const canvas = document.getElementById('completionStarBg');
+      if (!canvas) {
+        console.log('completionStarBg canvas not found, skipping completion stars creation');
+        return;
+      }
+      
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
+      const stars = [];
+      for (let i = 0; i < 180; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 2,
+          alpha: Math.random(),
+          speed: Math.random() * 0.02
+        });
+      }
+      
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        stars.forEach(star => {
+          star.alpha += star.speed;
+          if (star.alpha > 1) star.alpha = 0;
+          
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 233, 176, ${star.alpha})`;
+          ctx.fill();
+        });
+        
+        requestAnimationFrame(animate);
+      }
+      
+      animate();
+    }
+    
     // 设置事件监听器
     function setupEventListeners() {
-      globeIcon.addEventListener('click', toggleLanguageDropdown);
-      recordBtn1.addEventListener('click', () => toggleRecording(1));
-      recordBtn2.addEventListener('click', () => toggleRecording(2));
-      playBtn1.addEventListener('click', () => playAudio(1));
-      playBtn2.addEventListener('click', () => playAudio(2));
-      reRecordBtn.addEventListener('click', () => goToStep(1));
-      nextStepBtn.addEventListener('click', showDeviceSelection);
+      console.log('设置事件监听器开始');
+      console.log('recordBtn1:', recordBtn1);
+      console.log('recordBtn2:', recordBtn2);
+      
+      if (recordBtn1) {
+        recordBtn1.addEventListener('click', () => {
+          console.log('录音按钮1被点击');
+          toggleRecording(1);
+        });
+      } else {
+        console.error('recordBtn1 未找到');
+      }
+      
+      if (recordBtn2) {
+        recordBtn2.addEventListener('click', () => {
+          console.log('录音按钮2被点击');
+          toggleRecording(2);
+        });
+      } else {
+        console.error('recordBtn2 未找到');
+      }
+      
+      // 其他事件监听器...
+      if (globeIcon) {
+        globeIcon.addEventListener('click', toggleLanguageDropdown);
+      }
+      
+      if (playBtn1) {
+        playBtn1.addEventListener('click', () => playAudio(1));
+      }
+      
+      if (playBtn2) {
+        playBtn2.addEventListener('click', () => playAudio(2));
+      }
+      
+      if (reRecordBtn) {
+        reRecordBtn.addEventListener('click', () => goToStep(1));
+      }
+      
+      if (nextStepBtn) {
+        nextStepBtn.addEventListener('click', showDeviceSelection);
+      }
+      
+      // 重新开始按钮
+      if (restartBtn) {
+        restartBtn.addEventListener('click', () => {
+          document.getElementById('step4').style.display = 'none';
+          restart();
+        });
+      }
       
       // 点击外部关闭语言下拉菜单
       document.addEventListener('click', function(event) {
         if (!event.target.closest('.language-selector')) {
-          languageDropdown.classList.remove('show');
+          if (languageDropdown) {
+            languageDropdown.classList.remove('show');
+          }
         }
       });
       
@@ -792,6 +1030,8 @@
           changeLanguage(this.dataset.lang);
         });
       });
+      
+      console.log('事件监听器设置完成');
     }
     
     // 语言切换
@@ -819,7 +1059,13 @@
       
       title.textContent = t.title;
       subtitle.textContent = t.subtitle;
-      document.querySelector('.call-text').textContent = t.callText;
+      
+      // 更新第一步的呼唤文本
+      const callText1 = document.querySelector('#step1 .call-text');
+      if (callText1) {
+        callText1.textContent = t.callText;
+      }
+      
       document.getElementById('hintText1').textContent = t.hintText1;
       document.getElementById('hintText2').textContent = t.hintText2;
       document.getElementById('statusMsg3').textContent = t.statusMsg3;
@@ -827,20 +1073,53 @@
       nextStepBtn.textContent = t.nextStep;
       footer.textContent = t.footer;
       searchingText.textContent = t.searchingText;
+      
+      // 更新步骤2的呼唤文本
+      const callText2 = document.querySelector('#step2 .call-text');
+      if (callText2) {
+        callText2.textContent = t.callText2;
+      }
+      
+      // 更新完成页面的文本
+      const completionTitle = document.getElementById('completionTitle');
+      const completionSubtitle = document.getElementById('completionSubtitle');
+      const completionMessage = document.querySelector('.completion-message');
+      const restartBtn = document.getElementById('restartBtn');
+      
+      if (completionTitle) {
+        completionTitle.textContent = t.title;
+      }
+      if (completionSubtitle) {
+        completionSubtitle.textContent = t.subtitle;
+      }
+      if (completionMessage) {
+        completionMessage.textContent = t.completionMessage;
+      }
+      if (restartBtn) {
+        restartBtn.textContent = t.restartBtn;
+      }
     }
     
     // 录音功能
     async function toggleRecording(stepNumber) {
-      const isRecording = stepNumber === 1 ? isRecording1 : isRecording2;
+      const isCurrentlyRecording = stepNumber === 1 ? isRecording1 : isRecording2;
       const recordBtn = stepNumber === 1 ? recordBtn1 : recordBtn2;
       const statusMsg = document.getElementById(`statusMsg${stepNumber}`);
       const hintText = document.getElementById(`hintText${stepNumber}`);
       
-      if (!isRecording) {
+      if (!isCurrentlyRecording) {
         try {
           statusMsg.textContent = translations[currentLang].requesting;
           
+          // 确保之前的媒体流已经释放
+          if (window.currentStream) {
+            window.currentStream.getTracks().forEach(track => track.stop());
+            window.currentStream = null;
+          }
+          
           const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          window.currentStream = stream; // 保存当前流的引用
+          
           const mediaRecorder = new MediaRecorder(stream);
           
           if (stepNumber === 1) {
@@ -867,21 +1146,44 @@
             } else {
               audioBlob2 = new Blob(audioChunks2, { type: 'audio/wav' });
             }
-            stream.getTracks().forEach(track => track.stop());
+            // 延迟释放媒体流，确保录音完成
+            setTimeout(() => {
+              if (window.currentStream) {
+                window.currentStream.getTracks().forEach(track => track.stop());
+                window.currentStream = null;
+              }
+            }, 100);
           };
           
           mediaRecorder.start();
           recordBtn.classList.add('recording');
           statusMsg.textContent = translations[currentLang].recording;
-          hintText.textContent = '点击停止录音';
+          if (hintText) {
+            hintText.textContent = '点击停止录音';
+          }
           
         } catch (error) {
           console.error('录音错误:', error);
-          statusMsg.textContent = '无法访问麦克风';
+          
+          // 更详细的错误处理
+          if (error.name === 'NotAllowedError') {
+            statusMsg.textContent = '麦克风权限被拒绝，请刷新页面重新授权';
+          } else if (error.name === 'NotFoundError') {
+            statusMsg.textContent = '未找到麦克风设备';
+          } else if (error.name === 'NotSupportedError') {
+            statusMsg.textContent = '浏览器不支持录音功能';
+          } else if (error.name === 'AbortError') {
+            statusMsg.textContent = '麦克风被其他应用占用，请关闭其他使用麦克风的程序';
+          } else {
+            statusMsg.textContent = `录音失败: ${error.message}`;
+          }
         }
       } else {
+        // 停止录音逻辑保持不变
         const mediaRecorder = stepNumber === 1 ? mediaRecorder1 : mediaRecorder2;
-        mediaRecorder.stop();
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+          mediaRecorder.stop();
+        }
         
         if (stepNumber === 1) {
           isRecording1 = false;
@@ -891,7 +1193,9 @@
         
         recordBtn.classList.remove('recording');
         statusMsg.textContent = translations[currentLang].recordComplete;
-        hintText.textContent = '录音完成';
+        if (hintText) {
+          hintText.textContent = '录音完成';
+        }
         
         setTimeout(() => {
           if (stepNumber === 1) {
@@ -928,74 +1232,86 @@
     
     // 显示设备选择
     async function showDeviceSelection() {
+      deviceSelection.style.display = 'flex';
+      
+      if (DEBUG_MODE) {
+        console.log('调试模式：显示模拟设备');
+        showMockDevices();
+        return;
+      }
+      
+      // 检查WebUSB支持
+      if (!('usb' in navigator)) {
+        alert('您的浏览器不支持WebUSB功能，请使用Chrome浏览器');
+        showMockDevices();
+        return;
+      }
+      
+      // 检查HTTPS环境
+      if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+        alert('WebUSB需要在HTTPS环境下运行');
+        showMockDevices();
+        return;
+      }
+      
       try {
-        // 检查WebUSB支持
-        if (!('usb' in navigator)) {
-          alert('您的浏览器不支持WebUSB功能，请使用Chrome浏览器并确保在HTTPS环境下运行');
-          return;
-        }
+        // 尝试获取已连接的设备
+        const devices = await navigator.usb.getDevices();
         
-        // 检查是否在安全环境下
-        if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
-          alert('WebUSB需要在HTTPS环境下运行，请使用HTTPS或本地服务器');
-          return;
-        }
-        
-        deviceSelection.style.display = 'flex';
-        
-        try {
-          // 获取已授权的设备
-          const devices = await navigator.usb.getDevices();
-          console.log('已授权的设备:', devices);
-          
+        if (devices.length > 0) {
+          // 显示已连接的设备
           const deviceList = document.getElementById('deviceList');
           deviceList.innerHTML = '';
           
-          if (devices.length > 0) {
-            devices.forEach((device, index) => {
-              const deviceItem = document.createElement('div');
-              deviceItem.className = 'device-item';
-              deviceItem.innerHTML = `
-                <h3>${device.productName || '未知设备'}</h3>
-                <p>制造商: ${device.manufacturerName || '未知'}</p>
-                <p>序列号: ${device.serialNumber || '无'}</p>
-              `;
-              deviceItem.addEventListener('click', () => selectDevice(device));
-              deviceList.appendChild(deviceItem);
-            });
-          } else {
-            // 显示请求新设备的选项
-            const requestItem = document.createElement('div');
-            requestItem.className = 'device-item';
-            requestItem.innerHTML = `
-              <h3>🔍 选择新设备</h3>
-              <p>点击选择要连接的USB设备</p>
+          devices.forEach(device => {
+            const deviceItem = document.createElement('div');
+            deviceItem.className = 'device-item';
+            deviceItem.innerHTML = `
+              <h3>${device.productName || '未知设备'}</h3>
+              <p>厂商: ${device.manufacturerName || '未知'}</p>
+              <p>状态: 已连接</p>
             `;
-            requestItem.addEventListener('click', requestNewDevice);
-            deviceList.appendChild(requestItem);
-          }
-        } catch (error) {
-          console.error('WebUSB设备获取失败:', error);
-          // 如果WebUSB失败，显示模拟设备列表
-          showMockDevices();
+            deviceItem.addEventListener('click', () => selectDevice(device));
+            deviceList.appendChild(deviceItem);
+          });
+          
+          // 添加选择新设备的选项
+          const newDeviceItem = document.createElement('div');
+          newDeviceItem.className = 'device-item';
+          newDeviceItem.innerHTML = `
+            <h3>选择新设备</h3>
+            <p>连接新的USB设备</p>
+            <p>状态: 点击选择</p>
+          `;
+          newDeviceItem.addEventListener('click', requestNewDevice);
+          deviceList.appendChild(newDeviceItem);
+        } else {
+          // 没有已连接设备，显示选择新设备选项
+          const deviceList = document.getElementById('deviceList');
+          deviceList.innerHTML = '';
+          
+          const newDeviceItem = document.createElement('div');
+          newDeviceItem.className = 'device-item';
+          newDeviceItem.innerHTML = `
+            <h3>选择USB设备</h3>
+            <p>请连接并选择USB设备</p>
+            <p>状态: 点击选择</p>
+          `;
+          newDeviceItem.addEventListener('click', requestNewDevice);
+          deviceList.appendChild(newDeviceItem);
         }
-        
       } catch (error) {
-        console.error('设备选择错误:', error);
-        alert('无法获取设备列表');
+        console.error('获取设备失败:', error);
+        showMockDevices();
       }
     }
     
     // 请求新设备
     async function requestNewDevice() {
       try {
-        alert('即将弹出USB设备选择对话框。\n\n请注意：\n1. 确保已插入USB设备\n2. 只有支持WebUSB的设备才会显示\n3. 如果没有设备显示，请尝试插入其他USB设备');
-        
         const device = await navigator.usb.requestDevice({
-          filters: [] // 空过滤器允许选择任何设备
+          filters: []
         });
-        
-        console.log('选择的设备:', device);
         selectDevice(device);
       } catch (error) {
         console.error('设备选择失败:', error);
@@ -1026,15 +1342,15 @@
       deviceList.innerHTML = '';
       
       const mockDevices = [
-        { name: '星空思念手链', type: 'USB设备', status: '已连接' },
-        { name: 'USB存储设备', type: '存储设备', status: '可用' }
+        { name: '星空思念手链', type: 'USB设备', status: '已连接', isMock: true },
+        { name: 'USB存储设备', type: '存储设备', status: '可用', isMock: true }
       ];
       
       mockDevices.forEach((device, index) => {
         const deviceItem = document.createElement('div');
         deviceItem.className = 'device-item';
         deviceItem.innerHTML = `
-          <h3>${device.name}</h3>
+          <h3>${device.name} ${DEBUG_MODE ? '(调试)' : ''}</h3>
           <p>类型: ${device.type}</p>
           <p>状态: ${device.status}</p>
         `;
@@ -1087,22 +1403,46 @@
         searchingTextElement.appendChild(span);
       });
       
+      // 启动星星上升效果
+      const cleanupStars = createRisingStars();
+      
+      // 记录开始时间
+      const startTime = Date.now();
+      
       try {
-        if (selectedDevice && selectedDevice.productName) {
-          // 真正的WebUSB设备
-          await exportViaWebUSB(audioBlob1, '星空思念_录音');
+        if (DEBUG_MODE || (selectedDevice && selectedDevice.isMock)) {
+          // 调试模式或模拟设备
+          console.log('调试模式：模拟导出两个音频文件');
+          await simulateExport();
+        } else if (selectedDevice && selectedDevice.productName) {
+          // 真正的WebUSB设备 - 导出两个音频
+          console.log('WebUSB模式：导出两个音频文件');
+          await exportViaWebUSB(audioBlob1, '星空思念_录音1');
+          if (audioBlob2) {
+            await exportViaWebUSB(audioBlob2, '星空思念_录音2');
+          }
         } else {
-          // 模拟导出过程
+          // 备用方案
           await simulateExport();
         }
         
-        // 导出成功
+        // 计算实际导出时间
+        const exportTime = Date.now() - startTime;
+        // 确保最少显示3秒，如果导出时间超过3秒则立即跳转
+        const minDisplayTime = 3000;
+        const remainingTime = Math.max(0, minDisplayTime - exportTime);
+        
+        // 导出成功，根据实际时间决定等待时长
         setTimeout(() => {
+          // 清理星星效果
+          if (cleanupStars) cleanupStars();
           exportPage.style.display = 'none';
-          alert('导出完成！您的声音已成功传输到设备中。');
-          restart();
-        }, 3000);
+          // 跳转到完成页面
+          goToStep(4);
+        }, remainingTime);
       } catch (error) {
+        // 清理星星效果
+        if (cleanupStars) cleanupStars();
         console.error('导出失败:', error);
         exportPage.style.display = 'none';
         alert('传输过程中出现错误，请重试。');
@@ -1110,13 +1450,26 @@
       }
     }
     
+
+    
     // 模拟导出过程
     function simulateExport() {
       return new Promise((resolve) => {
+        console.log('开始模拟导出第一个音频文件...');
         setTimeout(() => {
-          console.log('模拟导出完成');
-          resolve();
-        }, 3000);
+          console.log('第一个音频文件导出完成');
+          if (audioBlob2) {
+            console.log('开始模拟导出第二个音频文件...');
+            setTimeout(() => {
+              console.log('第二个音频文件导出完成');
+              console.log('所有音频文件模拟导出完成');
+              resolve();
+            }, 1500);
+          } else {
+            console.log('只有一个音频文件，模拟导出完成');
+            resolve();
+          }
+        }, 1500);
       });
     }
     
@@ -1214,10 +1567,29 @@
       // 显示目标步骤
       document.getElementById(`step${stepNumber}`).classList.add('active');
       
-      // 重置状态消息
-      const statusMsg = document.getElementById(`statusMsg${stepNumber}`);
-      if (statusMsg) {
-        statusMsg.textContent = '';
+      // 控制全局标题显示/隐藏
+      const mainCard = document.querySelector('.main-card');
+      if (stepNumber === 4) {
+        mainCard.classList.add('step4-active');
+      } else {
+        mainCard.classList.remove('step4-active');
+      }
+      
+      // 重置状态消息（但不清空第三页的固定文本）
+      if (stepNumber !== 3) {
+        const statusMsg = document.getElementById(`statusMsg${stepNumber}`);
+        if (statusMsg) {
+          statusMsg.textContent = '';
+        }
+      }
+      
+      // 确保第三页显示正确的文本
+      if (stepNumber === 3) {
+        const statusMsg3 = document.getElementById('statusMsg3');
+        if (statusMsg3) {
+          const t = translations[currentLang];
+          statusMsg3.textContent = t.statusMsg3;
+        }
       }
     }
     
@@ -1237,6 +1609,10 @@
       deviceSelection.style.display = 'none';
       exportPage.style.display = 'none';
       
+      // 移除step4-active类
+      const mainCard = document.querySelector('.main-card');
+      mainCard.classList.remove('step4-active');
+      
       goToStep(1);
       updateLanguage();
     }
@@ -1250,6 +1626,8 @@
       const exportCanvas = document.getElementById('exportStarBg');
       exportCanvas.width = window.innerWidth;
       exportCanvas.height = window.innerHeight;
+      
+
     });
   </script>
 </body>

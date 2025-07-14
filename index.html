@@ -793,8 +793,8 @@
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
           radius: Math.random() * 2,
-          alpha: Math.random(),
-          speed: Math.random() * 0.02
+          opacity: Math.random() * 0.5 + 0.5, // 固定透明度，不再变化
+          speed: Math.random() * 0.1 + 0.05 // 用于水平移动
         });
       }
       
@@ -802,12 +802,15 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         stars.forEach(star => {
-          star.alpha += star.speed;
-          if (star.alpha > 1) star.alpha = 0;
+          // 移除闪烁效果，保持固定透明度
+          star.x += star.speed;
+          if (star.x > canvas.width) star.x = 0;
           
           ctx.beginPath();
           ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 233, 176, ${star.alpha})`;
+          ctx.fillStyle = `rgba(255, 233, 176, ${star.opacity})`;
+          ctx.shadowColor = '#ffe9b0';
+          ctx.shadowBlur = 8;
           ctx.fill();
         });
         
@@ -830,8 +833,8 @@
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
           radius: Math.random() * 1.5,
-          alpha: Math.random(),
-          speed: Math.random() * 0.015
+          opacity: Math.random() * 0.5 + 0.5, // 固定透明度
+          speed: Math.random() * 0.1 + 0.05
         });
       }
       
@@ -839,12 +842,15 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         stars.forEach(star => {
-          star.alpha += star.speed;
-          if (star.alpha > 1) star.alpha = 0;
+          // 移除闪烁效果
+          star.x += star.speed;
+          if (star.x > canvas.width) star.x = 0;
           
           ctx.beginPath();
           ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 233, 176, ${star.alpha})`;
+          ctx.fillStyle = `rgba(255, 233, 176, ${star.opacity})`;
+          ctx.shadowColor = '#ffe9b0';
+          ctx.shadowBlur = 8;
           ctx.fill();
         });
         
@@ -1217,17 +1223,45 @@
         return;
       }
       
+      // 检查是否正在播放
+      if (playBtn.disabled) {
+        return; // 如果正在播放，直接返回
+      }
+      
       const audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio(audioUrl);
       
+      // 禁用按钮，防止重复点击
+      playBtn.disabled = true;
       playBtn.style.opacity = '0.6';
+      playBtn.style.cursor = 'not-allowed';
       
       audio.onended = () => {
+        // 播放结束后恢复按钮状态
+        playBtn.disabled = false;
         playBtn.style.opacity = '1';
+        playBtn.style.cursor = 'pointer';
         URL.revokeObjectURL(audioUrl);
       };
       
-      audio.play();
+      audio.onerror = () => {
+        // 播放出错时也要恢复按钮状态
+        playBtn.disabled = false;
+        playBtn.style.opacity = '1';
+        playBtn.style.cursor = 'pointer';
+        URL.revokeObjectURL(audioUrl);
+        alert('播放失败，请重试');
+      };
+      
+      audio.play().catch(error => {
+        // 播放失败时恢复按钮状态
+        playBtn.disabled = false;
+        playBtn.style.opacity = '1';
+        playBtn.style.cursor = 'pointer';
+        URL.revokeObjectURL(audioUrl);
+        console.error('播放失败:', error);
+        alert('播放失败，请重试');
+      });
     }
     
     // 显示设备选择
